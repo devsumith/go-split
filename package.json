@@ -1,0 +1,46 @@
+{
+  "name": "go-split",
+  "version": "1.0.0",
+  "description": "Splitter for React",
+  "main": "lib/index.js",
+  "module": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "sideEffects": false,
+  "files": [
+    "src",
+    "lib",
+    "lib/index.d.ts"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "publish:beta": "npm run build & npm publish -tag beta",
+    "publish:alpha": "npm run build & npm publish -tag alpha",
+    "publish:rc": "npm run build & npm publish -tag rc",
+    "publish:latest": "npm run build & npm publish"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Wroud/go-split.git"
+  },
+  "keywords": [
+    "react",
+    "typescript",
+    "split",
+    "splitter"
+  ],
+  "author": "Wroud",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Wroud/go-split/issues"
+  },
+  "homepage": "https://github.com/Wroud/go-split#readme",
+  "dependencies": {},
+  "peerDependencies": {
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0"
+  },
+  "devDependencies": {
+    "@types/react": "^16.9.11",
+    "typescript": "^3.7.2"
+  }
+}
