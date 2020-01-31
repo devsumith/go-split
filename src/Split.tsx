@@ -129,6 +129,7 @@ export class Split extends React.Component<SplitProps, ISplitState> {
     this.setState(state => ({
       ...state,
       size: state.size === -1 ? state.mainSize : state.size,
+      mainSize: state.size === -1 ? state.mainSize : state.size,
       isResizing: true
     }));
   };

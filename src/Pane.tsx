@@ -1,5 +1,5 @@
 import { SplitContext } from "./context";
-import React, { Props, useContext, useEffect, useRef } from "react";
+import React, { Props, useContext, useEffect, useRef, useCallback } from "react";
 
 export interface PaneProps extends Props<any> {
   main?: boolean;
@@ -13,24 +13,25 @@ export function Pane(props: PaneProps) {
   const ref = useRef<HTMLDivElement>(null);
 
   if (main) {
-    useEffect(() => {
-      function onResize() {
-        if (ref.current) {
-          if (state.split === "vertical") {
-            state.onSizeChange(ref.current.offsetWidth);
-          } else {
-            state.onSizeChange(ref.current.offsetHeight);
-          }
+    const handleResize = useCallback(()=>{
+      if (ref.current) {
+        if (state.split === "vertical") {
+          state.onSizeChange(ref.current.offsetWidth);
+        } else {
+          state.onSizeChange(ref.current.offsetHeight);
         }
       }
+    }, [state.onSizeChange, state.split, ref.current])
 
-      window.addEventListener("resize", onResize);
-      onResize();
+    useEffect(() => {
+      window.addEventListener("resize", handleResize);
 
       return () => {
-        window.removeEventListener("resize", onResize);
+        window.removeEventListener("resize", handleResize);
       };
-    }, [state.onSizeChange, state.split, ref.current]);
+    }, [handleResize]);
+    
+    handleResize();
   }
 
   let patchedStyle = { ...(style || {}) };
