@@ -163,7 +163,8 @@ export class Split extends React.Component<SplitProps, ISplitState> {
     }
     this.setState(state => ({
       ...state,
-      size: newSize
+      size: newSize,
+      mainSize: newSize,
     }));
   };
   onSplitResize = (event: UIEvent) => {
@@ -175,7 +176,7 @@ export class Split extends React.Component<SplitProps, ISplitState> {
             Math.floor(this.state.size * (newSize / this.lastContainerSize))
           );
         } else {
-          this.setSize(newSize);
+          this.setSize(this.state.size);
         }
       }
     }
