@@ -30,8 +30,8 @@ export function Pane(props: PaneProps) {
         window.removeEventListener("resize", handleResize);
       };
     }, [handleResize]);
-    
-    handleResize();
+
+    useEffect(handleResize);
   }
 
   let patchedStyle = { ...(style || {}) };

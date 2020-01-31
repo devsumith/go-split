@@ -64,10 +64,12 @@ export class Split extends React.Component<SplitProps, ISplitState> {
     this.lastContainerSize = -1;
   }
   onSizeChange = (mainSize: number) => {
-    this.setState(state => ({
-      ...state,
-      mainSize
-    }));
+    if(this.state.mainSize !== mainSize){
+      this.setState(state => ({
+        ...state,
+        mainSize
+      }));
+    }
   };
   onMouseDown = (event: React.MouseEvent<HTMLDivElement>) => {
     if (this.state.isResizing) {
