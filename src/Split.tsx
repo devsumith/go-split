@@ -169,12 +169,14 @@ export class Split extends React.Component<SplitProps, ISplitState> {
   onSplitResize = (event: UIEvent) => {
     const newSize = this.getContainerSize();
     if (this.state.size !== -1) {
-      if (this.state.size === this.lastContainerSize) {
-        this.setSize(newSize);
-      } else if (this.state.keepRatio) {
-        this.setSize(
-          Math.floor(this.state.size * (newSize / this.lastContainerSize))
-        );
+      if (newSize !== this.lastContainerSize) {
+        if (this.state.keepRatio) {
+          this.setSize(
+            Math.floor(this.state.size * (newSize / this.lastContainerSize))
+          );
+        } else {
+          this.setSize(newSize);
+        }
       }
     }
     this.lastContainerSize = newSize;
