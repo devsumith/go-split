@@ -6,11 +6,11 @@ export interface ISplitState {
     minSize: number;
     keepRatio: boolean;
     size: number;
-    mainSize: number;
+    mainRef: React.RefObject<HTMLDivElement>;
     isResizing: boolean;
     getContainerSize: () => number;
     setSize: (size: number) => void;
-    onSizeChange: (mainSize: number) => void;
+    getMainSize: () => number;
     onMouseDown: MouseEventHandler<HTMLDivElement>;
     onTouchStart: TouchEventHandler<HTMLDivElement>;
     onTouchEnd: TouchEventHandler<HTMLDivElement>;

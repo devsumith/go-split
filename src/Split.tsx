@@ -13,6 +13,7 @@ export interface SplitProps extends Props<any> {
 
 export class Split extends React.Component<SplitProps, ISplitState> {
   splitRef: React.RefObject<HTMLDivElement>;
+  mainRef: React.RefObject<HTMLDivElement>;
   count: number;
   lastContainerSize: number;
 
@@ -40,6 +41,10 @@ export class Split extends React.Component<SplitProps, ISplitState> {
 
   constructor(props: SplitProps) {
     super(props);
+    this.splitRef = React.createRef<HTMLDivElement>();
+    this.mainRef = React.createRef<HTMLDivElement>();
+    this.count = 0;
+    this.lastContainerSize = -1;
 
     this.state = {
       ...defaultState,
@@ -49,28 +54,26 @@ export class Split extends React.Component<SplitProps, ISplitState> {
       minSize: props.minSize || -1,
       keepRatio: !!props.keepRatio,
       size: props.minSize || -1,
-      mainSize: props.minSize || -1,
+      mainRef: this.mainRef,
       setSize: this.setSize,
       getContainerSize: this.getContainerSize,
-      onSizeChange: this.onSizeChange,
+      getMainSize: this.getMainSize,
       onMouseDown: this.onMouseDown,
       onTouchStart: this.onTouchStart,
       onClick: this.onClick,
       onDoubleClick: this.onDoubleClick,
       onTouchEnd: this.onMouseUp
     };
-    this.splitRef = React.createRef<HTMLDivElement>();
-    this.count = 0;
-    this.lastContainerSize = -1;
   }
-  onSizeChange = (mainSize: number) => {
-    if(this.state.mainSize !== mainSize){
-      this.setState(state => ({
-        ...state,
-        mainSize
-      }));
+  getMainSize = () => {
+    if (!this.mainRef.current) {
+      return -1;
     }
-  };
+    if (this.state.split === "vertical") {
+      return this.mainRef.current.offsetWidth;
+    }
+    return this.mainRef.current.offsetHeight;
+  }
   onMouseDown = (event: React.MouseEvent<HTMLDivElement>) => {
     if (this.state.isResizing) {
       return;
@@ -130,8 +133,7 @@ export class Split extends React.Component<SplitProps, ISplitState> {
   startResize = (clientX: number, clientY: number) => {
     this.setState(state => ({
       ...state,
-      size: state.size === -1 ? state.mainSize : state.size,
-      mainSize: state.size === -1 ? state.mainSize : state.size,
+      size: state.size === -1 ? this.getMainSize() : state.size,
       isResizing: true
     }));
   };

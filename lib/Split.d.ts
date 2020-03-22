@@ -11,11 +11,12 @@ export interface SplitProps extends Props<any> {
 }
 export declare class Split extends React.Component<SplitProps, ISplitState> {
     splitRef: React.RefObject<HTMLDivElement>;
+    mainRef: React.RefObject<HTMLDivElement>;
     count: number;
     lastContainerSize: number;
     static getDerivedStateFromProps(props: SplitProps, state: ISplitState): Partial<ISplitState> | null;
     constructor(props: SplitProps);
-    onSizeChange: (mainSize: number) => void;
+    getMainSize: () => number;
     onMouseDown: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
     onTouchStart: (event: React.TouchEvent<HTMLDivElement>) => void;
     onClick: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
