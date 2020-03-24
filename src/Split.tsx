@@ -77,6 +77,15 @@ export class Split extends React.Component<SplitProps, ISplitState> {
     }
     return this.mainRef.current.offsetHeight;
   }
+  getSecondSize = () => {
+    if (!this.secondRef.current) {
+      return -1;
+    }
+    if (this.state.split === "vertical") {
+      return this.secondRef.current.offsetWidth;
+    }
+    return this.secondRef.current.offsetHeight;
+  };
   onMouseDown = (event: React.MouseEvent<HTMLDivElement>) => {
     if (this.state.isResizing) {
       return;
@@ -142,10 +151,15 @@ export class Split extends React.Component<SplitProps, ISplitState> {
   };
   resize = (clientPosition: number) => {
     let newSize = -1;
-    if (this.getMainOffset() < this.getSecondOffset()) {
-      newSize = clientPosition - this.getContainerOffset();
-    } else {
+    if (
+      this.getSecondOffset() < this.getMainOffset() ||
+      (this.getSecondOffset() === this.getContainerOffset() &&
+        this.getSecondSize() === 0 &&
+        this.getMainSize() !== 0)
+    ) {
       newSize = this.getContainerOffset(true) - clientPosition;
+    } else {
+      newSize = clientPosition - this.getContainerOffset();
     }
     this.setSize(newSize);
   };
@@ -194,13 +208,7 @@ export class Split extends React.Component<SplitProps, ISplitState> {
       return -1;
     }
     if (this.state.split === "vertical") {
-      if (this.mainRef.current.offsetWidth === 0 && this.mainRef.current.offsetLeft === 0) {
-        return -1;
-      }
       return this.mainRef.current.offsetLeft;
-    }
-    if (this.mainRef.current.offsetHeight === 0 && this.mainRef.current.offsetTop === 0) {
-      return -1;
     }
     return this.mainRef.current.offsetTop;
   }
@@ -209,13 +217,7 @@ export class Split extends React.Component<SplitProps, ISplitState> {
       return -1;
     }
     if (this.state.split === "vertical") {
-      if (this.secondRef.current.offsetWidth === 0 && this.secondRef.current.offsetLeft === 0) {
-        return -1;
-      }
       return this.secondRef.current.offsetLeft;
-    }
-    if (this.secondRef.current.offsetHeight === 0 && this.secondRef.current.offsetTop === 0) {
-      return -1;
     }
     return this.secondRef.current.offsetTop;
   }
