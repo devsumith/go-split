@@ -18,6 +18,7 @@ export declare class Split extends React.Component<SplitProps, ISplitState> {
     static getDerivedStateFromProps(props: SplitProps, state: ISplitState): Partial<ISplitState> | null;
     constructor(props: SplitProps);
     getMainSize: () => number;
+    getSecondSize: () => number;
     onMouseDown: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
     onTouchStart: (event: React.TouchEvent<HTMLDivElement>) => void;
     onClick: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
