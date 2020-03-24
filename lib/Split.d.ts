@@ -12,6 +12,7 @@ export interface SplitProps extends Props<any> {
 export declare class Split extends React.Component<SplitProps, ISplitState> {
     splitRef: React.RefObject<HTMLDivElement>;
     mainRef: React.RefObject<HTMLDivElement>;
+    secondRef: React.RefObject<HTMLDivElement>;
     count: number;
     lastContainerSize: number;
     static getDerivedStateFromProps(props: SplitProps, state: ISplitState): Partial<ISplitState> | null;
@@ -25,12 +26,13 @@ export declare class Split extends React.Component<SplitProps, ISplitState> {
     onTouchMove: (event: TouchEvent) => void;
     onMouseUp: () => void;
     startResize: (clientX: number, clientY: number) => void;
-    resize: (clientX: number, clientY: number) => void;
+    resize: (clientPosition: number) => void;
     setSize: (size: number) => void;
     onSplitResize: (event: UIEvent) => void;
+    getMainOffset: () => number;
+    getSecondOffset: () => number;
     getContainerSize: () => number;
-    getContainerLeft: () => number;
-    getContainerTop: () => number;
+    getContainerOffset: (inverse?: boolean | undefined) => number;
     componentDidMount(): void;
     componentWillUnmount(): void;
     render(): JSX.Element;
