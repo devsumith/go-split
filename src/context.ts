@@ -8,6 +8,7 @@ export interface ISplitState {
   keepRatio: boolean;
   size: number;
   mainRef: React.RefObject<HTMLDivElement>;
+  secondRef: React.RefObject<HTMLDivElement>;
   isResizing: boolean;
   getContainerSize: () => number;
   setSize: (size: number) => void;

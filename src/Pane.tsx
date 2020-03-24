@@ -24,7 +24,7 @@ export function Pane(props: PaneProps) {
   }
 
   return (
-    <div className={className} style={patchedStyle} ref={main ? state.mainRef : undefined}>
+    <div className={className} style={patchedStyle} ref={main ? state.mainRef : state.secondRef}>
       {children}
     </div>
   );

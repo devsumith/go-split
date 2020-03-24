@@ -14,6 +14,7 @@ export interface SplitProps extends Props<any> {
 export class Split extends React.Component<SplitProps, ISplitState> {
   splitRef: React.RefObject<HTMLDivElement>;
   mainRef: React.RefObject<HTMLDivElement>;
+  secondRef: React.RefObject<HTMLDivElement>;
   count: number;
   lastContainerSize: number;
 
@@ -43,6 +44,7 @@ export class Split extends React.Component<SplitProps, ISplitState> {
     super(props);
     this.splitRef = React.createRef<HTMLDivElement>();
     this.mainRef = React.createRef<HTMLDivElement>();
+    this.secondRef = React.createRef<HTMLDivElement>();
     this.count = 0;
     this.lastContainerSize = -1;
 
@@ -55,6 +57,7 @@ export class Split extends React.Component<SplitProps, ISplitState> {
       keepRatio: !!props.keepRatio,
       size: props.minSize || -1,
       mainRef: this.mainRef,
+      secondRef: this.secondRef,
       setSize: this.setSize,
       getContainerSize: this.getContainerSize,
       getMainSize: this.getMainSize,
@@ -110,7 +113,7 @@ export class Split extends React.Component<SplitProps, ISplitState> {
     }
     event.preventDefault();
     const { clientX, clientY } = event;
-    this.resize(clientX, clientY);
+    this.resize(this.state.split === "vertical" ? clientX : clientY);
   };
   onTouchMove = (event: TouchEvent) => {
     if (!this.state.isResizing) {
@@ -118,7 +121,7 @@ export class Split extends React.Component<SplitProps, ISplitState> {
     }
     event.preventDefault();
     const { clientX, clientY } = event.touches[0];
-    this.resize(clientX, clientY);
+    this.resize(this.state.split === "vertical" ? clientX : clientY);
   };
   onMouseUp = () => {
     if (!this.state.isResizing) {
@@ -137,12 +140,12 @@ export class Split extends React.Component<SplitProps, ISplitState> {
       isResizing: true
     }));
   };
-  resize = (clientX: number, clientY: number) => {
+  resize = (clientPosition: number) => {
     let newSize = -1;
-    if (this.state.split === "vertical") {
-      newSize = clientX - this.getContainerLeft();
+    if (this.getMainOffset() < this.getSecondOffset()) {
+      newSize = clientPosition - this.getContainerOffset();
     } else {
-      newSize = clientY - this.getContainerTop();
+      newSize = this.getContainerOffset(true) - clientPosition;
     }
     this.setSize(newSize);
   };
@@ -186,6 +189,36 @@ export class Split extends React.Component<SplitProps, ISplitState> {
     }
     this.lastContainerSize = newSize;
   };
+  getMainOffset = () => {
+    if (!this.mainRef.current) {
+      return -1;
+    }
+    if (this.state.split === "vertical") {
+      if (this.mainRef.current.offsetWidth === 0 && this.mainRef.current.offsetLeft === 0) {
+        return -1;
+      }
+      return this.mainRef.current.offsetLeft;
+    }
+    if (this.mainRef.current.offsetHeight === 0 && this.mainRef.current.offsetTop === 0) {
+      return -1;
+    }
+    return this.mainRef.current.offsetTop;
+  }
+  getSecondOffset = () => {
+    if (!this.secondRef.current) {
+      return -1;
+    }
+    if (this.state.split === "vertical") {
+      if (this.secondRef.current.offsetWidth === 0 && this.secondRef.current.offsetLeft === 0) {
+        return -1;
+      }
+      return this.secondRef.current.offsetLeft;
+    }
+    if (this.secondRef.current.offsetHeight === 0 && this.secondRef.current.offsetTop === 0) {
+      return -1;
+    }
+    return this.secondRef.current.offsetTop;
+  }
   getContainerSize = () => {
     if (!this.splitRef.current) {
       return -1;
@@ -195,17 +228,14 @@ export class Split extends React.Component<SplitProps, ISplitState> {
     }
     return this.splitRef.current.offsetHeight;
   };
-  getContainerLeft = () => {
+  getContainerOffset = (inverse?: boolean) => {
     if (!this.splitRef.current) {
       return -1;
     }
-    return this.splitRef.current.offsetLeft;
-  };
-  getContainerTop = () => {
-    if (!this.splitRef.current) {
-      return -1;
+    if (this.state.split === "vertical") {
+      return this.splitRef.current.offsetLeft + (inverse ? this.splitRef.current.offsetWidth : 0);
     }
-    return this.splitRef.current.offsetTop;
+    return this.splitRef.current.offsetTop + (inverse ? this.splitRef.current.offsetHeight : 0);
   };
 
   componentDidMount() {
