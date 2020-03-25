@@ -1,5 +1,7 @@
 import { createContext, MouseEventHandler, TouchEventHandler } from "react";
 
+export type SplitterMode = 'maximize' | 'minimize' | 'resize'
+
 export interface ISplitState {
   split: "horizontal" | "vertical";
   sticky: number;
@@ -7,12 +9,17 @@ export interface ISplitState {
   minSize: number;
   keepRatio: boolean;
   size: number;
+  ratio: number;
+  mode: SplitterMode;
   mainRef: React.RefObject<HTMLDivElement>;
   secondRef: React.RefObject<HTMLDivElement>;
   isResizing: boolean;
-  getContainerSize: () => number;
-  setSize: (size: number) => void;
-  getMainSize: () => number;
+  isMainSecond(): boolean;
+  getContainerSize():number;
+  getMainSize(): number;
+  getMainSizeStyle(): string;
+  setMode(mode: SplitterMode)
+  setSize(size: number, updateRatio?: boolean): void;
   onMouseDown: MouseEventHandler<HTMLDivElement>;
   onTouchStart: TouchEventHandler<HTMLDivElement>;
   onTouchEnd: TouchEventHandler<HTMLDivElement>;
