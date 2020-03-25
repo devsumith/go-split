@@ -1,4 +1,4 @@
-import { ISplitState } from "./context";
+import { ISplitState, SplitterMode } from "./context";
 import React, { Props } from "react";
 export interface SplitProps extends Props<any> {
     split?: "horizontal" | "vertical";
@@ -13,28 +13,30 @@ export declare class Split extends React.Component<SplitProps, ISplitState> {
     splitRef: React.RefObject<HTMLDivElement>;
     mainRef: React.RefObject<HTMLDivElement>;
     secondRef: React.RefObject<HTMLDivElement>;
-    count: number;
-    lastContainerSize: number;
+    isModeSetByUser: boolean;
     static getDerivedStateFromProps(props: SplitProps, state: ISplitState): Partial<ISplitState> | null;
     constructor(props: SplitProps);
+    getMainSizeStyle: () => string;
+    getContainerSize: () => number;
     getMainSize: () => number;
     getSecondSize: () => number;
-    onMouseDown: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
-    onTouchStart: (event: React.TouchEvent<HTMLDivElement>) => void;
-    onClick: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
-    onDoubleClick: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
+    onStartResize: (event: Event | React.SyntheticEvent<HTMLDivElement, Event>) => void;
+    onEndResize: (event: Event | React.SyntheticEvent<HTMLDivElement, Event>) => void;
+    onDoubleClick: (event: React.SyntheticEvent<HTMLDivElement, Event>) => void;
     onMouseMove: (event: MouseEvent) => void;
     onTouchMove: (event: TouchEvent) => void;
-    onMouseUp: () => void;
-    startResize: (clientX: number, clientY: number) => void;
-    resize: (clientPosition: number) => void;
-    setSize: (size: number) => void;
+    stopResize: () => void;
+    startResize: () => void;
+    resize: (clientX: number, clientY: number) => void;
+    setSize: (size: number, updateRatio?: boolean | undefined) => void;
+    setMode: (mode: SplitterMode) => void;
     onSplitResize: (event: UIEvent) => void;
+    isMainSecond: () => boolean;
     getMainOffset: () => number;
     getSecondOffset: () => number;
-    getContainerSize: () => number;
     getContainerOffset: (inverse?: boolean | undefined) => number;
     componentDidMount(): void;
     componentWillUnmount(): void;
     render(): JSX.Element;
+    private getSize;
 }
