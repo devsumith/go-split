@@ -171,8 +171,12 @@ export class Split extends React.Component<SplitProps, ISplitState> {
     }));
   };
   setMode = (mode: SplitterMode) => {
+    const resetSize = this.isModeSetByUser;
     this.isModeSetByUser = mode !== 'resize';
-    this.setState({ mode });
+    this.setState(state => ({
+      mode,
+      size: resetSize ? -1 : state.size 
+    }));
   };
   onSplitResize = (event: UIEvent) => {
     if (this.state.size !== -1) {

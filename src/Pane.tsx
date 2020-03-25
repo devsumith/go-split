@@ -13,7 +13,15 @@ export function Pane(props: PaneProps) {
 
   let patchedStyle = { ...(style || {}) };
 
-  if (main && (state.size !== -1 || state.mode !== 'resize')) {
+  if(!main && state.mode === 'minimize') {
+    if (state.split === "vertical") {
+      patchedStyle.minWidth = '100%';
+      patchedStyle.maxWidth = `0px`;
+    } else {
+      patchedStyle.minHeight = '100%';
+      patchedStyle.maxHeight = `0px`;
+    }
+  } else if (main && (state.size !== -1 || state.mode !== 'resize')) {
     if (state.split === "vertical") {
       patchedStyle.minWidth = state.getMainSizeStyle();
       patchedStyle.maxWidth = `0px`;
