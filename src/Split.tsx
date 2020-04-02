@@ -3,6 +3,7 @@ import React, { Props } from "react";
 
 export interface SplitProps extends Props<any> {
   split?: "horizontal" | "vertical";
+  mode?: SplitterMode;
   sticky?: number;
   minSize?: number;
   maxSize?: number;
@@ -26,14 +27,16 @@ export class Split extends React.Component<SplitProps, ISplitState> {
       props.maxSize !== state.maxSize ||
       props.minSize !== state.minSize ||
       props.sticky !== state.sticky ||
-      props.keepRatio !== state.keepRatio
+      props.keepRatio !== state.keepRatio ||
+      props.mode !== state.mode
     ) {
       return {
         split: props.split || "vertical",
         sticky: props.sticky || 0,
         maxSize: props.maxSize || -1,
         minSize: props.minSize || -1,
-        keepRatio: !!props.keepRatio
+        keepRatio: !!props.keepRatio,
+        mode: props.mode || 'resize'
       };
     }
     return null;
@@ -55,7 +58,7 @@ export class Split extends React.Component<SplitProps, ISplitState> {
       keepRatio: !!props.keepRatio,
       size: props.minSize || -1,
       ratio: -1,
-      mode: 'resize',
+      mode: props.mode ||'resize',
       mainRef: this.mainRef,
       secondRef: this.secondRef,
       isMainSecond: this.isMainSecond,
