@@ -1,6 +1,7 @@
 import { MouseEventHandler, TouchEventHandler } from "react";
 export declare type SplitterMode = 'maximize' | 'minimize' | 'resize';
 export interface ISplitState {
+    isFixed: boolean;
     split: "horizontal" | "vertical";
     sticky: number;
     maxSize: number;
