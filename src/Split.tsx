@@ -36,7 +36,8 @@ export class Split extends React.Component<SplitProps, ISplitState> {
         maxSize: props.maxSize || -1,
         minSize: props.minSize || -1,
         keepRatio: !!props.keepRatio,
-        mode: props.mode || state.mode
+        isFixed: !!props.mode,
+        mode: state.isFixed && !!props.mode ? 'resize' : state.mode,
       };
     }
     return null;
@@ -51,6 +52,7 @@ export class Split extends React.Component<SplitProps, ISplitState> {
 
     this.state = {
       ...defaultState,
+      isFixed: !!props.mode,
       split: props.split || "vertical",
       sticky: props.sticky || -1,
       maxSize: props.maxSize || -1,
