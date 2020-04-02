@@ -37,7 +37,7 @@ export class Split extends React.Component<SplitProps, ISplitState> {
         minSize: props.minSize || -1,
         keepRatio: !!props.keepRatio,
         isFixed: !!props.mode,
-        mode: state.isFixed && !!props.mode ? 'resize' : state.mode,
+        mode: state.isFixed && !props.mode ? 'resize' : state.mode,
       };
     }
     return null;
