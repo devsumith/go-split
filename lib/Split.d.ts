@@ -2,6 +2,7 @@ import { ISplitState, SplitterMode } from "./context";
 import React, { Props } from "react";
 export interface SplitProps extends Props<any> {
     split?: "horizontal" | "vertical";
+    mode?: SplitterMode;
     sticky?: number;
     minSize?: number;
     maxSize?: number;
