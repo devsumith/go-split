@@ -2,9 +2,9 @@
   "compilerOptions": {
     "outDir": "./lib",
     "baseUrl": "./src",
-    "module": "commonjs",
+    "module": "ES6",
     "moduleResolution": "node",
-    "target": "es2015",
+    "target": "ES6",
     "declaration": true,
     "jsx": "react",
     "forceConsistentCasingInFileNames": true,
