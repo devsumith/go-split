@@ -36,11 +36,12 @@
   "homepage": "https://github.com/Wroud/go-split#readme",
   "dependencies": {},
   "peerDependencies": {
-    "react": "^16.12.0",
-    "react-dom": "^16.12.0"
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
   },
   "devDependencies": {
-    "@types/react": "^16.9.11",
-    "typescript": "^3.7.2"
+    "@types/react": "^16.9.49",
+    "@types/react-dom": "^16.9.8",
+    "typescript": "^4.2.3"
   }
 }
