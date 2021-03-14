@@ -117,10 +117,11 @@ export class Split extends React.Component<SplitProps, ISplitState> {
     if (!this.splitRef.current) {
       return -1;
     }
+    const rect = this.splitRef.current.getBoundingClientRect();
     if (this.state.split === "vertical") {
-      return this.splitRef.current.offsetLeft + (inverse ? this.splitRef.current.offsetWidth : 0);
+      return rect.left + (inverse ? rect.width : 0);
     }
-    return this.splitRef.current.offsetTop + (inverse ? this.splitRef.current.offsetHeight : 0);
+    return rect.top + (inverse ? rect.height : 0);
   };
   stopResize = () => {
     this.setState({
