@@ -99,20 +99,22 @@ export class Split extends React.Component<SplitProps, ISplitState> {
     if (!this.mainRef.current) {
       return -1;
     }
+    const rect = this.mainRef.current.getBoundingClientRect();
     if (this.state.split === "vertical") {
-      return this.mainRef.current.offsetLeft;
+      return rect.left;
     }
-    return this.mainRef.current.offsetTop;
-  }
+    return rect.top;
+  };
   getSecondOffset = () => {
     if (!this.secondRef.current) {
       return -1;
     }
+    const rect = this.secondRef.current.getBoundingClientRect();
     if (this.state.split === "vertical") {
-      return this.secondRef.current.offsetLeft;
+      return rect.left;
     }
-    return this.secondRef.current.offsetTop;
-  }
+    return rect.top;
+  };
   getContainerOffset = (inverse?: boolean) => {
     if (!this.splitRef.current) {
       return -1;
@@ -150,7 +152,7 @@ export class Split extends React.Component<SplitProps, ISplitState> {
   setSize = (size: number, updateRatio?: boolean) => {
     let newSize = size;
     let mode = this.state.mode;
-    
+
     if (this.state.maxSize > -1 && newSize > this.state.maxSize) {
       newSize = this.state.maxSize;
     }
@@ -265,9 +267,10 @@ export class Split extends React.Component<SplitProps, ISplitState> {
     if (!element) {
       return -1;
     }
+    const rect = element.getBoundingClientRect();
     if (this.state.split === "vertical") {
-      return element.offsetWidth;
+      return rect.width;
     }
-    return element.offsetHeight;
+    return rect.height;
   }
 }
