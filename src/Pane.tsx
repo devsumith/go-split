@@ -1,4 +1,4 @@
-import { SplitContext } from "./context";
+import { SplitContext, SplitterMode } from "./context";
 import React, { Props, useContext } from "react";
 
 export interface PaneProps extends Props<any> {
@@ -12,6 +12,7 @@ export function Pane(props: PaneProps) {
   const state = useContext(SplitContext);
 
   let patchedStyle = { ...(style || {}) };
+  let mode: SplitterMode = state.mode;
 
   if(!main && state.mode === 'minimize') {
     if (state.split === "vertical") {
@@ -21,6 +22,7 @@ export function Pane(props: PaneProps) {
       patchedStyle.minHeight = '100%';
       patchedStyle.maxHeight = `0px`;
     }
+    mode = 'maximize';
   } else if (main && (state.size !== -1 || state.mode !== 'resize')) {
     if (state.split === "vertical") {
       patchedStyle.minWidth = state.getMainSizeStyle();
@@ -32,7 +34,7 @@ export function Pane(props: PaneProps) {
   }
 
   return (
-    <div className={className} style={patchedStyle} ref={main ? state.mainRef : state.secondRef}>
+    <div className={className} style={patchedStyle} data-mode={mode} ref={main ? state.mainRef : state.secondRef}>
       {children}
     </div>
   );
