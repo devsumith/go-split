@@ -14,6 +14,10 @@ export function Pane(props: PaneProps) {
   let patchedStyle = { ...(style || {}) };
   let mode: SplitterMode = state.mode;
 
+  if(!main && state.mode !== 'resize') {
+    mode = state.mode === 'minimize' ? 'maximize' : 'minimize';
+  }
+
   if(!main && state.mode === 'minimize') {
     if (state.split === "vertical") {
       patchedStyle.minWidth = '100%';
@@ -22,7 +26,6 @@ export function Pane(props: PaneProps) {
       patchedStyle.minHeight = '100%';
       patchedStyle.maxHeight = `0px`;
     }
-    mode = 'maximize';
   } else if (main && (state.size !== -1 || state.mode !== 'resize')) {
     if (state.split === "vertical") {
       patchedStyle.minWidth = state.getMainSizeStyle();
