@@ -196,21 +196,18 @@ export class Split extends React.Component<SplitProps, ISplitState> {
     if(event.target !== event.currentTarget){
       return;
     }
-    event.preventDefault();
     this.startResize();
   };
   onEndResize = (event: Event | React.SyntheticEvent<HTMLDivElement>) => {
     if (!this.state.isResizing || event.target !== event.currentTarget) {
       return;
     }
-    event.preventDefault();
     this.stopResize();
   };
   onDoubleClick = (event: React.SyntheticEvent<HTMLDivElement>) => {
     if(event.target !== event.currentTarget){
       return;
     }
-    event.preventDefault();
   };
   onMouseMove = (event: MouseEvent) => {
     if (!this.state.isResizing) {
