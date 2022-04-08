@@ -3,36 +3,32 @@ import React, { PropsWithChildren, useContext } from "react";
 
 export interface PaneProps extends PropsWithChildren<any> {
   main?: boolean;
+  basis?: string;
   style?: React.CSSProperties;
   className?: string;
 }
 
 export function Pane(props: PaneProps) {
-  const { className, children, main, style } = props;
+  const { className, children, main, basis, style } = props;
   const state = useContext(SplitContext);
 
-  let patchedStyle = { ...(style || {}) };
+  let patchedStyle: React.CSSProperties = { 
+    flexShrink: 1,
+    flexGrow: main ? 0 : 1,
+    flexBasis: 0,
+    ...(style || {}) 
+  };
+
   let mode: SplitterMode = state.mode;
 
   if(!main && state.mode !== 'resize') {
     mode = state.mode === 'minimize' ? 'maximize' : 'minimize';
   }
 
-  if(!main && state.mode === 'minimize') {
-    if (state.split === "vertical") {
-      patchedStyle.minWidth = '100%';
-      patchedStyle.maxWidth = `0px`;
-    } else {
-      patchedStyle.minHeight = '100%';
-      patchedStyle.maxHeight = `0px`;
-    }
-  } else if (main && (state.size !== -1 || state.mode !== 'resize')) {
-    if (state.split === "vertical") {
-      patchedStyle.minWidth = state.getMainSizeStyle();
-      patchedStyle.maxWidth = `0px`;
-    } else {
-      patchedStyle.minHeight = state.getMainSizeStyle();
-      patchedStyle.maxHeight = `0px`;
+  if(main) {
+    patchedStyle.flexBasis = state.getMainSizeStyle();
+    if(patchedStyle.flexBasis === 'auto' && basis) {
+      patchedStyle.flexBasis = basis;
     }
   }
 
