@@ -19,7 +19,7 @@ export interface ISplitState {
   getContainerSize():number;
   getMainSize(): number;
   getMainSizeStyle(): string;
-  setMode(mode: SplitterMode)
+  setMode(mode: SplitterMode): void;
   setSize(size: number, updateRatio?: boolean): void;
   onMouseDown: MouseEventHandler<HTMLDivElement>;
   onTouchStart: TouchEventHandler<HTMLDivElement>;

@@ -1,7 +1,7 @@
 import { SplitContext, ISplitState, defaultState, SplitterMode } from "./context";
-import React, { Props } from "react";
+import React, { PropsWithChildren } from "react";
 
-export interface SplitProps extends Props<any> {
+export interface SplitProps extends PropsWithChildren<any> {
   split?: "horizontal" | "vertical";
   mode?: SplitterMode;
   sticky?: number;
@@ -10,13 +10,16 @@ export interface SplitProps extends Props<any> {
   keepRatio?: boolean;
   className?: string;
   style?: React.CSSProperties;
+  onModeChange(mode: SplitterMode): void;
+  onResize(size: number, ratio: number): void;
 }
 
 export class Split extends React.Component<SplitProps, ISplitState> {
-  splitRef: React.RefObject<HTMLDivElement>;
-  mainRef: React.RefObject<HTMLDivElement>;
-  secondRef: React.RefObject<HTMLDivElement>;
-  isModeSetByUser: boolean;
+  protected splitRef: React.RefObject<HTMLDivElement>;
+  protected mainRef: React.RefObject<HTMLDivElement>;
+  protected secondRef: React.RefObject<HTMLDivElement>;
+  protected sizeObserver: ResizeObserver | null;
+  protected isModeSetByUser: boolean;
 
   static getDerivedStateFromProps(
     props: SplitProps,
@@ -49,6 +52,7 @@ export class Split extends React.Component<SplitProps, ISplitState> {
     this.mainRef = React.createRef<HTMLDivElement>();
     this.secondRef = React.createRef<HTMLDivElement>();
     this.isModeSetByUser = false;
+    this.sizeObserver = null;
 
     this.state = {
       ...defaultState,
@@ -131,10 +135,12 @@ export class Split extends React.Component<SplitProps, ISplitState> {
     });
   };
   startResize = () => {
-    this.setState(state => ({
-      size: state.size === -1 ? this.getMainSize() : state.size,
+    const size = this.state.size === -1 ? this.getMainSize() : this.state.size;
+    this.setState({
+      size,
       isResizing: true
-    }));
+    });
+    this.props.onResize(size, this.state.ratio);
   };
   resize = (clientX: number, clientY: number) => {
     if (!this.state.isResizing) {
@@ -178,11 +184,16 @@ export class Split extends React.Component<SplitProps, ISplitState> {
       this.isModeSetByUser = !!updateRatio && mode !== 'resize';
     }
 
-    this.setState(state => ({
+    const ratio = updateRatio ? newSize / sideSize : this.state.ratio;
+
+    this.setState({
       size: newSize,
       mode,
-      ratio: updateRatio ? newSize / sideSize : state.ratio
-    }));
+      ratio
+    });
+
+    this.props.onResize(newSize, ratio);
+    this.props.onModeChange(mode);
   };
   setMode = (mode: SplitterMode) => {
     const resetSize = this.isModeSetByUser;
@@ -191,6 +202,7 @@ export class Split extends React.Component<SplitProps, ISplitState> {
       mode,
       size: resetSize ? -1 : state.size 
     }));
+    this.props.onModeChange(mode);
   };
   onStartResize = (event: Event | React.SyntheticEvent<HTMLDivElement>) => {
     if(event.target !== event.currentTarget){
@@ -225,7 +237,7 @@ export class Split extends React.Component<SplitProps, ISplitState> {
     const { clientX, clientY } = event.touches[0];
     this.resize(clientX, clientY);
   };
-  onSplitResize = (event: UIEvent) => {
+  onSplitResize = () => {
     if (this.state.size !== -1) {
       if(this.state.keepRatio) {
         this.setSize(Math.round(this.state.ratio * this.getContainerSize()));
@@ -236,7 +248,12 @@ export class Split extends React.Component<SplitProps, ISplitState> {
   };
 
   componentDidMount() {
-    window.addEventListener("resize", this.onSplitResize);
+    if(this.splitRef.current) {
+      this.sizeObserver = new ResizeObserver(()=>{
+        this.onSplitResize();
+      });
+      this.sizeObserver.observe(this.splitRef.current);
+    }
     document.addEventListener("mouseup", this.onEndResize);
     document.addEventListener("mousemove", this.onMouseMove);
 
@@ -245,7 +262,7 @@ export class Split extends React.Component<SplitProps, ISplitState> {
     document.addEventListener("touchcancel", this.onEndResize);
   }
   componentWillUnmount() {
-    window.removeEventListener("resize", this.onSplitResize);
+    this.sizeObserver?.disconnect();
     document.removeEventListener("mouseup", this.onEndResize);
     document.removeEventListener("mousemove", this.onMouseMove);
 
