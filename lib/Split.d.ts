@@ -3,6 +3,8 @@ import React, { PropsWithChildren } from "react";
 export interface SplitProps extends PropsWithChildren<any> {
     split?: "horizontal" | "vertical";
     mode?: SplitterMode;
+    size?: number;
+    ratio?: number;
     sticky?: number;
     minSize?: number;
     maxSize?: number;
