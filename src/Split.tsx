@@ -10,8 +10,8 @@ export interface SplitProps extends PropsWithChildren<any> {
   keepRatio?: boolean;
   className?: string;
   style?: React.CSSProperties;
-  onModeChange(mode: SplitterMode): void;
-  onResize(size: number, ratio: number): void;
+  onModeChange?(mode: SplitterMode): void;
+  onResize?(size: number, ratio: number): void;
 }
 
 export class Split extends React.Component<SplitProps, ISplitState> {
@@ -140,7 +140,7 @@ export class Split extends React.Component<SplitProps, ISplitState> {
       size,
       isResizing: true
     });
-    this.props.onResize(size, this.state.ratio);
+    this.props.onResize?.(size, this.state.ratio);
   };
   resize = (clientX: number, clientY: number) => {
     if (!this.state.isResizing) {
@@ -192,8 +192,8 @@ export class Split extends React.Component<SplitProps, ISplitState> {
       ratio
     });
 
-    this.props.onResize(newSize, ratio);
-    this.props.onModeChange(mode);
+    this.props.onResize?.(newSize, ratio);
+    this.props.onModeChange?.(mode);
   };
   setMode = (mode: SplitterMode) => {
     const resetSize = this.isModeSetByUser;
@@ -202,7 +202,7 @@ export class Split extends React.Component<SplitProps, ISplitState> {
       mode,
       size: resetSize ? -1 : state.size 
     }));
-    this.props.onModeChange(mode);
+    this.props.onModeChange?.(mode);
   };
   onStartResize = (event: Event | React.SyntheticEvent<HTMLDivElement>) => {
     if(event.target !== event.currentTarget){
