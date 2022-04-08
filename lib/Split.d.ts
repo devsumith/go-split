@@ -1,6 +1,6 @@
 import { ISplitState, SplitterMode } from "./context";
-import React, { Props } from "react";
-export interface SplitProps extends Props<any> {
+import React, { PropsWithChildren } from "react";
+export interface SplitProps extends PropsWithChildren<any> {
     split?: "horizontal" | "vertical";
     mode?: SplitterMode;
     sticky?: number;
@@ -9,12 +9,15 @@ export interface SplitProps extends Props<any> {
     keepRatio?: boolean;
     className?: string;
     style?: React.CSSProperties;
+    onModeChange(mode: SplitterMode): void;
+    onResize(size: number, ratio: number): void;
 }
 export declare class Split extends React.Component<SplitProps, ISplitState> {
-    splitRef: React.RefObject<HTMLDivElement>;
-    mainRef: React.RefObject<HTMLDivElement>;
-    secondRef: React.RefObject<HTMLDivElement>;
-    isModeSetByUser: boolean;
+    protected splitRef: React.RefObject<HTMLDivElement>;
+    protected mainRef: React.RefObject<HTMLDivElement>;
+    protected secondRef: React.RefObject<HTMLDivElement>;
+    protected sizeObserver: ResizeObserver | null;
+    protected isModeSetByUser: boolean;
     static getDerivedStateFromProps(props: SplitProps, state: ISplitState): Partial<ISplitState> | null;
     constructor(props: SplitProps);
     isMainSecond: () => boolean;
@@ -35,7 +38,7 @@ export declare class Split extends React.Component<SplitProps, ISplitState> {
     onDoubleClick: (event: React.SyntheticEvent<HTMLDivElement>) => void;
     onMouseMove: (event: MouseEvent) => void;
     onTouchMove: (event: TouchEvent) => void;
-    onSplitResize: (event: UIEvent) => void;
+    onSplitResize: () => void;
     componentDidMount(): void;
     componentWillUnmount(): void;
     render(): JSX.Element;

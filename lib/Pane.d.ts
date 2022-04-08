@@ -1,5 +1,5 @@
-import React, { Props } from "react";
-export interface PaneProps extends Props<any> {
+import React, { PropsWithChildren } from "react";
+export interface PaneProps extends PropsWithChildren<any> {
     main?: boolean;
     style?: React.CSSProperties;
     className?: string;
