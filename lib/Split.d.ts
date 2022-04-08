@@ -18,8 +18,7 @@ export declare class Split extends React.Component<SplitProps, ISplitState> {
     protected splitRef: React.RefObject<HTMLDivElement>;
     protected mainRef: React.RefObject<HTMLDivElement>;
     protected secondRef: React.RefObject<HTMLDivElement>;
-    protected sizeObserver: ResizeObserver | null;
-    protected isModeSetByUser: boolean;
+    protected sizeObserver: ResizeObserver;
     static getDerivedStateFromProps(props: SplitProps, state: ISplitState): Partial<ISplitState> | null;
     constructor(props: SplitProps);
     isMainSecond: () => boolean;
