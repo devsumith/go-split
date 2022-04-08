@@ -1,6 +1,6 @@
 {
   "name": "go-split",
-  "version": "2.2.2",
+  "version": "2.2.3",
   "description": "Splitter for React",
   "main": "lib/index.js",
   "module": "lib/index.js",
