@@ -87,10 +87,23 @@ export class Split extends React.Component<SplitProps, ISplitState> {
     };
   }
   isMainSecond = () => {
-    return this.getSecondOffset() < this.getMainOffset() 
+    let main = false;
+  
+    React.Children.forEach(this.props.children, (child, i)=> {
+      if(React.isValidElement(child) && 'main' in child.props) {
+        if(i > 0) {
+          main = true;
+        }
+      }
+    })
+
+    return (
+      main
+      || this.getSecondOffset() < this.getMainOffset() 
       || (this.getSecondOffset() === this.getContainerOffset() 
           && this.getSecondSize() === 0
-          && this.getMainSize() !== 0);
+          && this.getMainSize() !== 0)
+    );
   }
   getMainSizeStyle = () => {
     switch(this.state.mode){
