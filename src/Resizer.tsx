@@ -10,6 +10,10 @@ export function Resizer(props: ResizerProps) {
   const { className, children, style } = props;
   const state = useContext(SplitContext);
 
+  if(state.disable) {
+    return null;
+  }
+
   return (
     <div
       style={style}

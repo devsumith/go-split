@@ -10,6 +10,7 @@ export interface SplitProps extends PropsWithChildren<any> {
   minSize?: number;
   maxSize?: number;
   keepRatio?: boolean;
+  disable?: boolean;
   className?: string;
   style?: React.CSSProperties;
   onModeChange?(mode: SplitterMode): void;
@@ -32,6 +33,7 @@ export class Split extends React.Component<SplitProps, ISplitState> {
       props.minSize !== state.minSize ||
       props.sticky !== state.sticky ||
       props.keepRatio !== state.keepRatio ||
+      props.disable !== state.disable ||
       props.mode !== state.mode ||
       props.size !== state.size ||
       props.ratio !== state.ratio
@@ -42,6 +44,7 @@ export class Split extends React.Component<SplitProps, ISplitState> {
         maxSize: props.maxSize || -1,
         minSize: props.minSize || -1,
         keepRatio: !!props.keepRatio,
+        disable: !!props.disable,
         isFixed: !!props.mode,
         mode: props.mode || (state.isFixed ? 'resize' : state.mode),
         size: props.size ?? state.size,
@@ -68,6 +71,7 @@ export class Split extends React.Component<SplitProps, ISplitState> {
       maxSize: props.maxSize || -1,
       minSize: props.minSize || -1,
       keepRatio: !!props.keepRatio,
+      disable: !!props.disable,
       size: props.size ?? props.minSize ?? -1,
       ratio: props.ratio ?? -1,
       mode: props.mode ||'resize',

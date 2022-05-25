@@ -7,6 +7,7 @@ export interface ISplitState {
     maxSize: number;
     minSize: number;
     keepRatio: boolean;
+    disable: boolean;
     size: number;
     ratio: number;
     mode: SplitterMode;

@@ -9,6 +9,7 @@ export interface SplitProps extends PropsWithChildren<any> {
     minSize?: number;
     maxSize?: number;
     keepRatio?: boolean;
+    disable?: boolean;
     className?: string;
     style?: React.CSSProperties;
     onModeChange?(mode: SplitterMode): void;

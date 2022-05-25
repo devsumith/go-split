@@ -12,6 +12,10 @@ export function Pane(props: PaneProps) {
   const { className, children, main, basis, style } = props;
   const state = useContext(SplitContext);
 
+  if(state.disable && main) {
+    return null;
+  }
+
   let patchedStyle: React.CSSProperties = { 
     flexShrink: 1,
     flexGrow: main ? 0 : 1,
