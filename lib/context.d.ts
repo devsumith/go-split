@@ -11,8 +11,6 @@ export interface ISplitState {
     size: number;
     ratio: number;
     mode: SplitterMode;
-    mainRef: React.RefObject<HTMLDivElement>;
-    secondRef: React.RefObject<HTMLDivElement>;
     isResizing: boolean;
     isMainSecond(): boolean;
     getContainerSize(): number;

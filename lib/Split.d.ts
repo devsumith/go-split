@@ -16,9 +16,9 @@ export interface SplitProps extends PropsWithChildren<any> {
     onResize?(size: number, ratio: number): void;
 }
 export declare class Split extends React.Component<SplitProps, ISplitState> {
+    protected get mainRef(): HTMLDivElement | null;
+    protected get secondRef(): HTMLDivElement | null;
     protected splitRef: React.RefObject<HTMLDivElement>;
-    protected mainRef: React.RefObject<HTMLDivElement>;
-    protected secondRef: React.RefObject<HTMLDivElement>;
     protected sizeObserver: ResizeObserver;
     static getDerivedStateFromProps(props: SplitProps, state: ISplitState): Partial<ISplitState> | null;
     constructor(props: SplitProps);
