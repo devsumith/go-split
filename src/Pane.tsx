@@ -25,12 +25,6 @@ export function Pane(props: PaneProps) {
       ...(style || {}) 
     };
   
-    let mode: SplitterMode = state.mode;
-  
-    if(!main && state.mode !== 'resize') {
-      mode = state.mode === 'minimize' ? 'maximize' : 'minimize';
-    }
-  
     if(main) {
       patchedStyle.flexBasis = state.getMainSizeStyle();
       if(patchedStyle.flexBasis === 'auto' && basis) {
