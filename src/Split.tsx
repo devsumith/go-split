@@ -18,9 +18,15 @@ export interface SplitProps extends PropsWithChildren<any> {
 }
 
 export class Split extends React.Component<SplitProps, ISplitState> {
+  protected get mainRef(): HTMLDivElement | null {
+    return this.splitRef.current?.querySelector(`#pane-true`) ?? null;
+  }
+
+  protected get secondRef(): HTMLDivElement | null {
+    return this.splitRef.current?.querySelector(`#pane-false`) ?? null;
+  }
+
   protected splitRef: React.RefObject<HTMLDivElement>;
-  protected mainRef: React.RefObject<HTMLDivElement>;
-  protected secondRef: React.RefObject<HTMLDivElement>;
   protected sizeObserver: ResizeObserver;
 
   static getDerivedStateFromProps(
@@ -57,8 +63,6 @@ export class Split extends React.Component<SplitProps, ISplitState> {
   constructor(props: SplitProps) {
     super(props);
     this.splitRef = React.createRef<HTMLDivElement>();
-    this.mainRef = React.createRef<HTMLDivElement>();
-    this.secondRef = React.createRef<HTMLDivElement>();
     this.sizeObserver = new ResizeObserver(()=>{
       this.onSplitResize();
     });
@@ -75,8 +79,6 @@ export class Split extends React.Component<SplitProps, ISplitState> {
       size: props.size ?? props.minSize ?? -1,
       ratio: props.ratio ?? -1,
       mode: props.mode ||'resize',
-      mainRef: this.mainRef,
-      secondRef: this.secondRef,
       isMainSecond: this.isMainSecond,
       getContainerSize: this.getContainerSize,
       getMainSize: this.getMainSize,
@@ -121,27 +123,32 @@ export class Split extends React.Component<SplitProps, ISplitState> {
         }
         
         const container = this.getContainerSize();
+
+        if(container === -1) {
+          return `${this.state.size}px`;
+        }
+
         return `${Math.min(this.state.size, container)}px`;
     }
   }
   getContainerSize = () => this.getSize(this.splitRef.current);
-  getMainSize = () => this.getSize(this.mainRef.current);
-  getSecondSize = () => this.getSize(this.secondRef.current);
+  getMainSize = () => this.getSize(this.mainRef);
+  getSecondSize = () => this.getSize(this.secondRef);
   getMainOffset = () => {
-    if (!this.mainRef.current) {
+    if (!this.mainRef) {
       return -1;
     }
-    const rect = this.mainRef.current.getBoundingClientRect();
+    const rect = this.mainRef.getBoundingClientRect();
     if (this.state.split === "vertical") {
       return rect.left;
     }
     return rect.top;
   };
   getSecondOffset = () => {
-    if (!this.secondRef.current) {
+    if (!this.secondRef) {
       return -1;
     }
-    const rect = this.secondRef.current.getBoundingClientRect();
+    const rect = this.secondRef.getBoundingClientRect();
     if (this.state.split === "vertical") {
       return rect.left;
     }
