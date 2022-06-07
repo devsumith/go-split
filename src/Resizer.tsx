@@ -1,7 +1,7 @@
 import React, { PropsWithChildren, useContext } from "react";
 import { SplitContext } from "./context";
 
-export interface ResizerProps extends PropsWithChildren<any> {
+export interface ResizerProps extends PropsWithChildren {
   className?: string;
   style?: React.CSSProperties;
 }

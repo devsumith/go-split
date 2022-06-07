@@ -1,7 +1,7 @@
 import { SplitContext, SplitterMode } from "./context";
 import React, { PropsWithChildren, useContext, useLayoutEffect, useRef } from "react";
 
-export interface PaneProps extends PropsWithChildren<any> {
+export interface PaneProps extends PropsWithChildren {
   main?: boolean;
   basis?: string;
   style?: React.CSSProperties;

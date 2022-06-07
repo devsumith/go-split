@@ -1,5 +1,5 @@
 import React, { PropsWithChildren } from "react";
-export interface ResizerProps extends PropsWithChildren<any> {
+export interface ResizerProps extends PropsWithChildren {
     className?: string;
     style?: React.CSSProperties;
 }
