@@ -1,6 +1,6 @@
 import { ISplitState, SplitterMode } from "./context";
 import React, { PropsWithChildren } from "react";
-export interface SplitProps extends PropsWithChildren<any> {
+export interface SplitProps extends PropsWithChildren {
     split?: "horizontal" | "vertical";
     mode?: SplitterMode;
     size?: number;
@@ -29,11 +29,11 @@ export declare class Split extends React.Component<SplitProps, ISplitState> {
     getSecondSize: () => number;
     getMainOffset: () => number;
     getSecondOffset: () => number;
-    getContainerOffset: (inverse?: boolean | undefined) => number;
+    getContainerOffset: (inverse?: boolean) => number;
     stopResize: () => void;
     startResize: () => void;
     resize: (clientX: number, clientY: number) => void;
-    setSize: (size: number, updateRatio?: boolean | undefined) => void;
+    setSize: (size: number, updateRatio?: boolean) => void;
     setMode: (mode: SplitterMode) => void;
     onStartResize: (event: Event | React.SyntheticEvent<HTMLDivElement>) => void;
     onEndResize: (event: Event | React.SyntheticEvent<HTMLDivElement>) => void;

@@ -1,7 +1,7 @@
 import { SplitContext, ISplitState, defaultState, SplitterMode } from "./context";
 import React, { PropsWithChildren } from "react";
 
-export interface SplitProps extends PropsWithChildren<any> {
+export interface SplitProps extends PropsWithChildren {
   split?: "horizontal" | "vertical";
   mode?: SplitterMode;
   size?: number;
