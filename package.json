@@ -36,8 +36,8 @@
   "homepage": "https://github.com/Wroud/go-split#readme",
   "dependencies": {},
   "peerDependencies": {
-    "react": "~18.x.x",
-    "react-dom": "~18.x.x"
+    "react": "^16.14 || ^17.0 || ^18.0",
+    "react-dom": "^16.14 || ^17.0 || ^18.0"
   },
   "devDependencies": {
     "@types/react": "^18.0.12",
