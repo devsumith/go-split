@@ -63,7 +63,7 @@ export class Split extends React.Component<SplitProps, ISplitState> {
   constructor(props: SplitProps) {
     super(props);
     this.splitRef = React.createRef<HTMLDivElement>();
-    this.sizeObserver = new ResizeObserver(()=>{
+    this.sizeObserver = new ResizeObserver(() => {
       this.onSplitResize();
     });
 
@@ -78,26 +78,26 @@ export class Split extends React.Component<SplitProps, ISplitState> {
       disable: !!props.disable,
       size: props.size ?? props.minSize ?? -1,
       ratio: props.ratio ?? -1,
-      mode: props.mode ||'resize',
+      mode: props.mode || 'resize',
       isMainSecond: this.isMainSecond,
       getContainerSize: this.getContainerSize,
       getMainSize: this.getMainSize,
       getMainSizeStyle: this.getMainSizeStyle,
       setMode: this.setMode,
       setSize: this.setSize,
-      onMouseDown: this.onStartResize,
-      onTouchStart: this.onStartResize,
-      onClick: this.onEndResize,
-      onTouchEnd: this.onEndResize,
+      onMouseDown: this.handleReactStartResize,
+      onTouchStart: this.handleReactStartResize,
+      onClick: this.handleReactEndResize,
+      onTouchEnd: this.handleReactEndResize,
       onDoubleClick: this.onDoubleClick,
     };
   }
   isMainSecond = () => {
     let main = false;
-  
-    React.Children.forEach(this.props.children, (child, i)=> {
-      if(React.isValidElement(child) && 'main' in child.props) {
-        if(i > 0) {
+
+    React.Children.forEach(this.props.children, (child, i) => {
+      if (React.isValidElement(child) && 'main' in child.props) {
+        if (i > 0) {
           main = true;
         }
       }
@@ -105,26 +105,26 @@ export class Split extends React.Component<SplitProps, ISplitState> {
 
     return (
       main
-      || this.getSecondOffset() < this.getMainOffset() 
-      || (this.getSecondOffset() === this.getContainerOffset() 
-          && this.getSecondSize() === 0
-          && this.getMainSize() !== 0)
+      || this.getSecondOffset() < this.getMainOffset()
+      || (this.getSecondOffset() === this.getContainerOffset()
+        && this.getSecondSize() === 0
+        && this.getMainSize() !== 0)
     );
   }
   getMainSizeStyle = () => {
-    switch(this.state.mode){
+    switch (this.state.mode) {
       case 'minimize':
         return '0px';
       case 'maximize':
         return '100%';
       default:
-        if(this.state.size === -1) {
+        if (this.state.size === -1) {
           return 'auto';
         }
-        
+
         const container = this.getContainerSize();
 
-        if(container === -1) {
+        if (container === -1) {
           return `${this.state.size}px`;
         }
 
@@ -169,13 +169,19 @@ export class Split extends React.Component<SplitProps, ISplitState> {
       isResizing: false
     });
   };
-  startResize = () => {
-    const size = this.state.size === -1 ? this.getMainSize() : this.state.size;
+  startResize = (clientX: number, clientY: number) => {
     this.setState({
-      size,
       isResizing: true
     });
-    this.props.onResize?.(size, this.state.ratio);
+
+    const clientPosition = this.state.split === "vertical" ? clientX : clientY;
+    let newSize = -1;
+    if (this.isMainSecond()) {
+      newSize = this.getContainerOffset(true) - clientPosition;
+    } else {
+      newSize = clientPosition - this.getContainerOffset();
+    }
+    this.setSize(newSize, true);
   };
   resize = (clientX: number, clientY: number) => {
     if (!this.state.isResizing) {
@@ -192,7 +198,7 @@ export class Split extends React.Component<SplitProps, ISplitState> {
   };
   setSize = (size: number, updateRatio?: boolean) => {
     const sideSize = this.getContainerSize();
-    if(sideSize === -1) {
+    if (sideSize === -1) {
       return;
     }
 
@@ -206,13 +212,13 @@ export class Split extends React.Component<SplitProps, ISplitState> {
       newSize = this.state.minSize;
     }
 
-    if(mode !== 'maximize' && newSize < this.state.sticky) {
-      if(updateRatio) {
+    if (mode !== 'maximize' && newSize < this.state.sticky) {
+      if (updateRatio) {
         newSize = 0;
       }
       mode = 'minimize';
-    } else if(sideSize < newSize + this.state.sticky) {
-      if(updateRatio) {
+    } else if (sideSize < newSize + this.state.sticky) {
+      if (updateRatio) {
         newSize = sideSize;
       }
       mode = 'maximize';
@@ -235,20 +241,40 @@ export class Split extends React.Component<SplitProps, ISplitState> {
     this.setState({ mode });
     this.props.onModeChange?.(mode);
   };
-  onStartResize = (event: Event | React.SyntheticEvent<HTMLDivElement>) => {
-    if(event.target !== event.currentTarget){
+  handleReactStartResize = (event: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>) => {
+    if (event.target !== event.currentTarget) {
       return;
     }
-    this.startResize();
+    this.onStartResize(event.nativeEvent)
   };
-  onEndResize = (event: Event | React.SyntheticEvent<HTMLDivElement>) => {
-    if (!this.state.isResizing || event.target !== event.currentTarget) {
+  onStartResize = (event: TouchEvent | MouseEvent) => {
+    let clientX: number;
+    let clientY: number;
+
+    if (event instanceof MouseEvent) {
+      clientX = event.clientX;
+      clientY = event.clientX;
+    } else {
+      const touch = event.touches[0];
+      clientX = touch.clientX;
+      clientY = touch.clientX;
+    }
+    this.startResize(clientX, clientY);
+  };
+  handleReactEndResize = (event: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>) => {
+    if (event.target !== event.currentTarget) {
+      return;
+    }
+    this.onEndResize(event.nativeEvent)
+  };
+  onEndResize = (event: TouchEvent | MouseEvent) => {
+    if (!this.state.isResizing) {
       return;
     }
     this.stopResize();
   };
   onDoubleClick = (event: React.SyntheticEvent<HTMLDivElement>) => {
-    if(event.target !== event.currentTarget){
+    if (event.target !== event.currentTarget) {
       return;
     }
     const size = -1;
@@ -273,14 +299,14 @@ export class Split extends React.Component<SplitProps, ISplitState> {
   };
   onSplitResize = () => {
     if (this.state.size !== -1 && this.state.mode === 'resize') {
-      if(this.state.keepRatio) {
+      if (this.state.keepRatio) {
         this.setSize(Math.round(this.state.ratio * this.getContainerSize()));
       }
     }
   };
 
   componentDidMount() {
-    if(this.splitRef.current) {
+    if (this.splitRef.current) {
       this.sizeObserver.observe(this.splitRef.current);
     }
     document.addEventListener("mouseup", this.onEndResize);
@@ -291,7 +317,7 @@ export class Split extends React.Component<SplitProps, ISplitState> {
     document.addEventListener("touchcancel", this.onEndResize);
   }
   componentWillUnmount() {
-    if(this.splitRef.current) {
+    if (this.splitRef.current) {
       this.sizeObserver.unobserve(this.splitRef.current);
     }
     document.removeEventListener("mouseup", this.onEndResize);
@@ -318,6 +344,7 @@ export class Split extends React.Component<SplitProps, ISplitState> {
     if (!element) {
       return -1;
     }
+
     const rect = element.getBoundingClientRect();
     if (this.state.split === "vertical") {
       return rect.width;
