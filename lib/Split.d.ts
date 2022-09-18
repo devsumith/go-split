@@ -31,12 +31,14 @@ export declare class Split extends React.Component<SplitProps, ISplitState> {
     getSecondOffset: () => number;
     getContainerOffset: (inverse?: boolean) => number;
     stopResize: () => void;
-    startResize: () => void;
+    startResize: (clientX: number, clientY: number) => void;
     resize: (clientX: number, clientY: number) => void;
     setSize: (size: number, updateRatio?: boolean) => void;
     setMode: (mode: SplitterMode) => void;
-    onStartResize: (event: Event | React.SyntheticEvent<HTMLDivElement>) => void;
-    onEndResize: (event: Event | React.SyntheticEvent<HTMLDivElement>) => void;
+    handleReactStartResize: (event: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>) => void;
+    onStartResize: (event: TouchEvent | MouseEvent) => void;
+    handleReactEndResize: (event: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>) => void;
+    onEndResize: (event: TouchEvent | MouseEvent) => void;
     onDoubleClick: (event: React.SyntheticEvent<HTMLDivElement>) => void;
     onMouseMove: (event: MouseEvent) => void;
     onTouchMove: (event: TouchEvent) => void;
