@@ -174,14 +174,14 @@ export class Split extends React.Component<SplitProps, ISplitState> {
       isResizing: true
     });
 
-    const clientPosition = this.state.split === "vertical" ? clientX : clientY;
-    let newSize = -1;
-    if (this.isMainSecond()) {
-      newSize = this.getContainerOffset(true) - clientPosition;
-    } else {
-      newSize = clientPosition - this.getContainerOffset();
-    }
-    this.setSize(newSize, true);
+    // const clientPosition = this.state.split === "vertical" ? clientX : clientY;
+    // let newSize = -1;
+    // if (this.isMainSecond()) {
+    //   newSize = this.getContainerOffset(true) - clientPosition;
+    // } else {
+    //   newSize = clientPosition - this.getContainerOffset();
+    // }
+    // this.setSize(newSize, true);
   };
   resize = (clientX: number, clientY: number) => {
     if (!this.state.isResizing) {
