@@ -5,4 +5,4 @@ export interface PaneProps extends PropsWithChildren {
     style?: React.CSSProperties;
     className?: string;
 }
-export declare function Pane(props: PaneProps): JSX.Element | null;
+export declare function Pane(props: PaneProps): JSX.Element;

@@ -41,10 +41,6 @@ export function Pane(props: PaneProps) {
     mode = state.mode === 'minimize' ? 'maximize' : 'minimize';
   }
 
-  if(state.disable && mode === 'minimize') {
-    return null;
-  }
-
   return (
     <div
       id={`pane-${main ?? false}`}
