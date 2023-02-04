@@ -35,14 +35,14 @@ export function Pane(props: PaneProps) {
     Object.assign(ref.current.style, patchedStyle);
   })
 
-  if(state.disable && main) {
-    return null;
-  }
-
   let mode: SplitterMode = state.mode;
 
   if(!main && state.mode !== 'resize') {
     mode = state.mode === 'minimize' ? 'maximize' : 'minimize';
+  }
+
+  if(state.disable && mode === 'minimize') {
+    return null;
   }
 
   return (
