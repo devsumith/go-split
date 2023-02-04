@@ -50,7 +50,7 @@ export class Split extends React.Component<SplitProps, ISplitState> {
         maxSize: props.maxSize || -1,
         minSize: props.minSize || -1,
         keepRatio: !!props.keepRatio,
-        disable: !!props.disable,
+        disable: props.disable ?? state.disable,
         isFixed: !!props.mode,
         mode: props.mode || (state.isFixed ? 'resize' : state.mode),
         size: props.size ?? state.size,
@@ -85,6 +85,7 @@ export class Split extends React.Component<SplitProps, ISplitState> {
       getMainSizeStyle: this.getMainSizeStyle,
       setMode: this.setMode,
       setSize: this.setSize,
+      setDisable: this.setDisable,
       onMouseDown: this.handleReactStartResize,
       onTouchStart: this.handleReactStartResize,
       onClick: this.handleReactEndResize,
@@ -195,6 +196,11 @@ export class Split extends React.Component<SplitProps, ISplitState> {
       newSize = clientPosition - this.getContainerOffset();
     }
     this.setSize(newSize, true);
+  };
+  setDisable = (disable: boolean) =>{
+    this.setState({
+      disable
+    });
   };
   setSize = (size: number, updateRatio?: boolean) => {
     const sideSize = this.getContainerSize();

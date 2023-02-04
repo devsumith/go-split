@@ -33,6 +33,7 @@ export declare class Split extends React.Component<SplitProps, ISplitState> {
     stopResize: () => void;
     startResize: (clientX: number, clientY: number) => void;
     resize: (clientX: number, clientY: number) => void;
+    setDisable: (disable: boolean) => void;
     setSize: (size: number, updateRatio?: boolean) => void;
     setMode: (mode: SplitterMode) => void;
     handleReactStartResize: (event: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>) => void;

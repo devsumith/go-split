@@ -18,6 +18,7 @@ export interface ISplitState {
     getMainSizeStyle(): string;
     setMode(mode: SplitterMode): void;
     setSize(size: number, updateRatio?: boolean): void;
+    setDisable(state: boolean): void;
     onMouseDown: MouseEventHandler<HTMLDivElement>;
     onTouchStart: TouchEventHandler<HTMLDivElement>;
     onTouchEnd: TouchEventHandler<HTMLDivElement>;
