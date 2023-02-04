@@ -14,6 +14,7 @@ export interface SplitProps extends PropsWithChildren {
     style?: React.CSSProperties;
     onModeChange?(mode: SplitterMode): void;
     onResize?(size: number, ratio: number): void;
+    onDisable?(disable: boolean): void;
 }
 export declare class Split extends React.Component<SplitProps, ISplitState> {
     protected get mainRef(): HTMLDivElement | null;

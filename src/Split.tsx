@@ -15,6 +15,7 @@ export interface SplitProps extends PropsWithChildren {
   style?: React.CSSProperties;
   onModeChange?(mode: SplitterMode): void;
   onResize?(size: number, ratio: number): void;
+  onDisable?(disable: boolean): void;
 }
 
 export class Split extends React.Component<SplitProps, ISplitState> {
@@ -207,6 +208,7 @@ export class Split extends React.Component<SplitProps, ISplitState> {
     } else {
       this.setMode(this.props.mode ?? 'resize')
     }
+    this.props.onDisable?.(disable);
   };
   setSize = (size: number, updateRatio?: boolean) => {
     const sideSize = this.getContainerSize();
