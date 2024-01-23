@@ -1,34 +1,39 @@
-import { SplitContext, ISplitState, defaultState, SplitterMode } from "./context";
-import React, { PropsWithChildren } from "react";
+import {
+  SplitContext,
+  ISplitState,
+  defaultState,
+  SplitterMode,
+} from "./context"
+import React, { PropsWithChildren } from "react"
 
 export interface SplitProps extends PropsWithChildren {
-  split?: "horizontal" | "vertical";
-  mode?: SplitterMode;
-  size?: number;
-  ratio?: number;
-  sticky?: number;
-  minSize?: number;
-  maxSize?: number;
-  keepRatio?: boolean;
-  disable?: boolean;
-  className?: string;
-  style?: React.CSSProperties;
-  onModeChange?(mode: SplitterMode): void;
-  onResize?(size: number, ratio: number): void;
-  onDisable?(disable: boolean): void;
+  split?: "horizontal" | "vertical"
+  mode?: SplitterMode
+  size?: number
+  ratio?: number
+  sticky?: number
+  minSize?: number
+  maxSize?: number
+  keepRatio?: boolean
+  disable?: boolean
+  className?: string
+  style?: React.CSSProperties
+  onModeChange?(mode: SplitterMode): void
+  onResize?(size: number, ratio: number): void
+  onDisable?(disable: boolean): void
 }
 
 export class Split extends React.Component<SplitProps, ISplitState> {
   protected get mainRef(): HTMLDivElement | null {
-    return this.splitRef.current?.querySelector(`#pane-true`) ?? null;
+    return this.splitRef.current?.querySelector(`#pane-true`) ?? null
   }
 
   protected get secondRef(): HTMLDivElement | null {
-    return this.splitRef.current?.querySelector(`#pane-false`) ?? null;
+    return this.splitRef.current?.querySelector(`#pane-false`) ?? null
   }
 
-  protected splitRef: React.RefObject<HTMLDivElement>;
-  protected sizeObserver: ResizeObserver;
+  public splitRef: React.RefObject<HTMLDivElement>
+  protected sizeObserver: ResizeObserver
 
   static getDerivedStateFromProps(
     props: SplitProps,
@@ -53,20 +58,20 @@ export class Split extends React.Component<SplitProps, ISplitState> {
         keepRatio: !!props.keepRatio,
         disable: props.disable ?? state.disable,
         isFixed: !!props.mode,
-        mode: props.mode || (state.isFixed ? 'resize' : state.mode),
+        mode: props.mode || (state.isFixed ? "resize" : state.mode),
         size: props.size ?? state.size,
-        ratio: props.ratio ?? state.ratio
-      };
+        ratio: props.ratio ?? state.ratio,
+      }
     }
-    return null;
+    return null
   }
 
   constructor(props: SplitProps) {
-    super(props);
-    this.splitRef = React.createRef<HTMLDivElement>();
+    super(props)
+    this.splitRef = React.createRef<HTMLDivElement>()
     this.sizeObserver = new ResizeObserver(() => {
-      this.onSplitResize();
-    });
+      this.onSplitResize()
+    })
 
     this.state = {
       ...defaultState,
@@ -79,7 +84,7 @@ export class Split extends React.Component<SplitProps, ISplitState> {
       disable: !!props.disable,
       size: props.size ?? props.minSize ?? -1,
       ratio: props.ratio ?? -1,
-      mode: props.mode || 'resize',
+      mode: props.mode || "resize",
       isMainSecond: this.isMainSecond,
       getContainerSize: this.getContainerSize,
       getMainSize: this.getMainSize,
@@ -92,89 +97,89 @@ export class Split extends React.Component<SplitProps, ISplitState> {
       onClick: this.handleReactEndResize,
       onTouchEnd: this.handleReactEndResize,
       onDoubleClick: this.onDoubleClick,
-    };
+    }
   }
   isMainSecond = () => {
-    let main = false;
+    let main = false
 
     React.Children.forEach(this.props.children, (child, i) => {
-      if (React.isValidElement(child) && 'main' in child.props) {
+      if (React.isValidElement(child) && "main" in child.props) {
         if (i > 0) {
-          main = true;
+          main = true
         }
       }
     })
 
     return (
-      main
-      || this.getSecondOffset() < this.getMainOffset()
-      || (this.getSecondOffset() === this.getContainerOffset()
-        && this.getSecondSize() === 0
-        && this.getMainSize() !== 0)
-    );
+      main ||
+      this.getSecondOffset() < this.getMainOffset() ||
+      (this.getSecondOffset() === this.getContainerOffset() &&
+        this.getSecondSize() === 0 &&
+        this.getMainSize() !== 0)
+    )
   }
   getMainSizeStyle = () => {
     switch (this.state.mode) {
-      case 'minimize':
-        return '0px';
-      case 'maximize':
-        return '100%';
+      case "minimize":
+        return "0px"
+      case "maximize":
+        return "100%"
       default:
         if (this.state.size === -1) {
-          return 'auto';
+          return "auto"
         }
 
-        const container = this.getContainerSize();
+        const container = this.getContainerSize()
 
         if (container === -1) {
-          return `${this.state.size}px`;
+          return `${this.state.size}px`
         }
 
-        return `${Math.min(this.state.size, container)}px`;
+        return `${Math.min(this.state.size, container)}px`
     }
   }
-  getContainerSize = () => this.getSize(this.splitRef.current);
-  getMainSize = () => this.getSize(this.mainRef);
-  getSecondSize = () => this.getSize(this.secondRef);
+  getContainerSize = () => this.getSize(this.splitRef.current)
+  getMainSize = () => this.getSize(this.mainRef)
+  getSecondSize = () => this.getSize(this.secondRef)
   getMainOffset = () => {
     if (!this.mainRef) {
-      return -1;
+      return -1
     }
-    const rect = this.mainRef.getBoundingClientRect();
+    const rect = this.mainRef.getBoundingClientRect()
     if (this.state.split === "vertical") {
-      return rect.left;
+      return rect.left
     }
-    return rect.top;
-  };
+    return rect.top
+  }
   getSecondOffset = () => {
     if (!this.secondRef) {
-      return -1;
+      return -1
     }
-    const rect = this.secondRef.getBoundingClientRect();
+    const rect = this.secondRef.getBoundingClientRect()
     if (this.state.split === "vertical") {
-      return rect.left;
+      return rect.left
     }
-    return rect.top;
-  };
+    return rect.top
+  }
   getContainerOffset = (inverse?: boolean) => {
     if (!this.splitRef.current) {
-      return -1;
+      return -1
     }
-    const rect = this.splitRef.current.getBoundingClientRect();
+    const rect = this.splitRef.current.getBoundingClientRect()
     if (this.state.split === "vertical") {
-      return rect.left + (inverse ? rect.width : 0);
+      return rect.left + (inverse ? rect.width : 0)
     }
-    return rect.top + (inverse ? rect.height : 0);
-  };
+    return rect.top + (inverse ? rect.height : 0)
+  }
   stopResize = () => {
     this.setState({
-      isResizing: false
-    });
-  };
+      isResizing: false,
+    })
+  }
   startResize = (clientX: number, clientY: number) => {
     this.setState({
-      isResizing: true
-    });
+      isResizing: true,
+    })
 
     // const clientPosition = this.state.split === "vertical" ? clientX : clientY;
     // let newSize = -1;
@@ -184,166 +189,170 @@ export class Split extends React.Component<SplitProps, ISplitState> {
     //   newSize = clientPosition - this.getContainerOffset();
     // }
     // this.setSize(newSize, true);
-  };
+  }
   resize = (clientX: number, clientY: number) => {
     if (!this.state.isResizing) {
-      return;
+      return
     }
-    const clientPosition = this.state.split === "vertical" ? clientX : clientY;
-    let newSize = -1;
+    const clientPosition = this.state.split === "vertical" ? clientX : clientY
+    let newSize = -1
     if (this.isMainSecond()) {
-      newSize = this.getContainerOffset(true) - clientPosition;
+      newSize = this.getContainerOffset(true) - clientPosition
     } else {
-      newSize = clientPosition - this.getContainerOffset();
+      newSize = clientPosition - this.getContainerOffset()
     }
-    this.setSize(newSize, true);
-  };
-  setDisable = (disable: boolean) =>{
+    this.setSize(newSize, true)
+  }
+  setDisable = (disable: boolean) => {
     this.setState({
-      disable
-    });
+      disable,
+    })
 
     if (disable) {
-      this.setMode('maximize')
+      this.setMode("maximize")
     } else {
-      this.setMode(this.props.mode ?? 'resize')
+      this.setMode(this.props.mode ?? "resize")
     }
-    this.props.onDisable?.(disable);
-  };
+    this.props.onDisable?.(disable)
+  }
   setSize = (size: number, updateRatio?: boolean) => {
-    const sideSize = this.getContainerSize();
+    const sideSize = this.getContainerSize()
     if (sideSize === -1) {
-      return;
+      return
     }
 
-    let newSize = size;
-    let mode = this.state.mode;
+    let newSize = size
+    let mode = this.state.mode
 
     if (this.state.maxSize > -1 && newSize > this.state.maxSize) {
-      newSize = this.state.maxSize;
+      newSize = this.state.maxSize
     }
     if (this.state.minSize > -1 && newSize < this.state.minSize) {
-      newSize = this.state.minSize;
+      newSize = this.state.minSize
     }
 
-    if (mode !== 'maximize' && newSize < this.state.sticky) {
+    if (mode !== "maximize" && newSize < this.state.sticky) {
       if (updateRatio) {
-        newSize = 0;
+        newSize = 0
       }
-      mode = 'minimize';
+      mode = "minimize"
     } else if (sideSize < newSize + this.state.sticky) {
       if (updateRatio) {
-        newSize = sideSize;
+        newSize = sideSize
       }
-      mode = 'maximize';
+      mode = "maximize"
     } else {
-      mode = 'resize';
+      mode = "resize"
     }
 
-    const ratio = updateRatio ? newSize / sideSize : this.state.ratio;
+    const ratio = updateRatio ? newSize / sideSize : this.state.ratio
 
     this.setState({
       size: newSize,
       mode,
-      ratio
-    });
+      ratio,
+    })
 
-    this.props.onResize?.(newSize, ratio);
-    this.props.onModeChange?.(mode);
-  };
+    this.props.onResize?.(newSize, ratio)
+    this.props.onModeChange?.(mode)
+  }
   setMode = (mode: SplitterMode) => {
-    this.setState({ mode });
-    this.props.onModeChange?.(mode);
-  };
-  handleReactStartResize = (event: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>) => {
+    this.setState({ mode })
+    this.props.onModeChange?.(mode)
+  }
+  handleReactStartResize = (
+    event: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>
+  ) => {
     if (event.target !== event.currentTarget) {
-      return;
+      return
     }
     this.onStartResize(event.nativeEvent)
-  };
+  }
   onStartResize = (event: TouchEvent | MouseEvent) => {
-    let clientX: number;
-    let clientY: number;
+    let clientX: number
+    let clientY: number
 
     if (event instanceof MouseEvent) {
-      clientX = event.clientX;
-      clientY = event.clientX;
+      clientX = event.clientX
+      clientY = event.clientX
     } else {
-      const touch = event.touches[0];
-      clientX = touch.clientX;
-      clientY = touch.clientX;
+      const touch = event.touches[0]
+      clientX = touch.clientX
+      clientY = touch.clientX
     }
-    this.startResize(clientX, clientY);
-  };
-  handleReactEndResize = (event: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>) => {
+    this.startResize(clientX, clientY)
+  }
+  handleReactEndResize = (
+    event: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>
+  ) => {
     if (event.target !== event.currentTarget) {
-      return;
+      return
     }
     this.onEndResize(event.nativeEvent)
-  };
+  }
   onEndResize = (event: TouchEvent | MouseEvent) => {
     if (!this.state.isResizing) {
-      return;
+      return
     }
-    this.stopResize();
-  };
+    this.stopResize()
+  }
   onDoubleClick = (event: React.SyntheticEvent<HTMLDivElement>) => {
     if (event.target !== event.currentTarget) {
-      return;
+      return
     }
-    const size = -1;
-    this.setState({ size });
-    this.props.onResize?.(size, this.state.ratio);
-  };
+    const size = -1
+    this.setState({ size })
+    this.props.onResize?.(size, this.state.ratio)
+  }
   onMouseMove = (event: MouseEvent) => {
     if (!this.state.isResizing) {
-      return;
+      return
     }
-    event.preventDefault();
-    const { clientX, clientY } = event;
-    this.resize(clientX, clientY);
-  };
+    event.preventDefault()
+    const { clientX, clientY } = event
+    this.resize(clientX, clientY)
+  }
   onTouchMove = (event: TouchEvent) => {
     if (!this.state.isResizing) {
-      return;
+      return
     }
-    event.preventDefault();
-    const { clientX, clientY } = event.touches[0];
-    this.resize(clientX, clientY);
-  };
+    event.preventDefault()
+    const { clientX, clientY } = event.touches[0]
+    this.resize(clientX, clientY)
+  }
   onSplitResize = () => {
-    if (this.state.size !== -1 && this.state.mode === 'resize') {
+    if (this.state.size !== -1 && this.state.mode === "resize") {
       if (this.state.keepRatio) {
-        this.setSize(Math.round(this.state.ratio * this.getContainerSize()));
+        this.setSize(Math.round(this.state.ratio * this.getContainerSize()))
       }
     }
-  };
+  }
 
   componentDidMount() {
     if (this.splitRef.current) {
-      this.sizeObserver.observe(this.splitRef.current);
+      this.sizeObserver.observe(this.splitRef.current)
     }
-    document.addEventListener("mouseup", this.onEndResize);
-    document.addEventListener("mousemove", this.onMouseMove);
+    document.addEventListener("mouseup", this.onEndResize)
+    document.addEventListener("mousemove", this.onMouseMove)
 
-    document.addEventListener("touchmove", this.onTouchMove);
-    document.addEventListener("touchend", this.onEndResize);
-    document.addEventListener("touchcancel", this.onEndResize);
+    document.addEventListener("touchmove", this.onTouchMove)
+    document.addEventListener("touchend", this.onEndResize)
+    document.addEventListener("touchcancel", this.onEndResize)
   }
   componentWillUnmount() {
     if (this.splitRef.current) {
-      this.sizeObserver.unobserve(this.splitRef.current);
+      this.sizeObserver.unobserve(this.splitRef.current)
     }
-    document.removeEventListener("mouseup", this.onEndResize);
-    document.removeEventListener("mousemove", this.onMouseMove);
+    document.removeEventListener("mouseup", this.onEndResize)
+    document.removeEventListener("mousemove", this.onMouseMove)
 
-    document.removeEventListener("touchmove", this.onTouchMove);
-    document.removeEventListener("touchend", this.onEndResize);
-    document.removeEventListener("touchcancel", this.onEndResize);
+    document.removeEventListener("touchmove", this.onTouchMove)
+    document.removeEventListener("touchend", this.onEndResize)
+    document.removeEventListener("touchcancel", this.onEndResize)
   }
 
   render() {
-    const { className, children, style } = this.props;
+    const { className, children, style } = this.props
 
     return (
       <SplitContext.Provider value={this.state}>
@@ -351,18 +360,18 @@ export class Split extends React.Component<SplitProps, ISplitState> {
           {children}
         </div>
       </SplitContext.Provider>
-    );
+    )
   }
 
   private getSize(element: HTMLDivElement | null) {
     if (!element) {
-      return -1;
+      return -1
     }
 
-    const rect = element.getBoundingClientRect();
+    const rect = element.getBoundingClientRect()
     if (this.state.split === "vertical") {
-      return rect.width;
+      return rect.width
     }
-    return rect.height;
+    return rect.height
   }
 }
