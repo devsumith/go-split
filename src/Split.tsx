@@ -140,12 +140,20 @@ export class Split extends React.Component<SplitProps, ISplitState> {
         }
 
         if (this.state.size === -1) {
+          if (this.state.minSize > 0) {
+            return `${this.state.minSize}px`
+          }
+
           return "auto"
         }
 
         const container = this.getContainerSize();
 
         if (container === -1) {
+          if (this.state.maxSize > 0) {
+            return `${this.state.maxSize}px`
+          }
+
           return `${this.state.size}px`
         }
 
@@ -242,11 +250,6 @@ export class Split extends React.Component<SplitProps, ISplitState> {
       newSize = this.state.maxSize
       sideSize = sideSize - newSize
     }
-    
-    if(this.state.maxSize < 0 && newSize > this.state.maxSize) {
-      newSize = sideSize + Math.abs(this.state.maxSize);
-    }
-
     if (this.state.minSize > -1 && newSize < this.state.minSize) {
       newSize = this.state.minSize
       sideSize = sideSize - newSize
