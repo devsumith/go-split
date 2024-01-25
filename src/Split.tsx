@@ -140,6 +140,10 @@ export class Split extends React.Component<SplitProps, ISplitState> {
           return `${this.state.minSize}px`
         }
 
+        if (this.state.size >= this.state.maxSize) {
+          return `${this.state.maxSize}px`
+        }
+
         if (this.state.size === -1) {
           if (this.state.minSize > 0) {
             return `${this.state.minSize}px`
