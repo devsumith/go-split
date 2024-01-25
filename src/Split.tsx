@@ -27,7 +27,7 @@ export class Split extends React.Component<SplitProps, ISplitState> {
     return this.splitRef.current?.querySelector(`#pane-false`) ?? null;
   }
 
-  public splitRef: React.RefObject<HTMLDivElement>;
+  protected splitRef: React.RefObject<HTMLDivElement>;
   protected sizeObserver: ResizeObserver;
 
   static getDerivedStateFromProps(
