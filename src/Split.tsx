@@ -211,7 +211,7 @@ export class Split extends React.Component<SplitProps, ISplitState> {
     this.props.onDisable?.(disable);
   };
   setSize = (size: number, updateRatio?: boolean) => {
-    const sideSize = this.getContainerSize();
+    let sideSize = this.getContainerSize();
     if (sideSize === -1) {
       return;
     }
@@ -219,19 +219,24 @@ export class Split extends React.Component<SplitProps, ISplitState> {
     let newSize = size;
     let mode = this.state.mode;
 
-    if (this.state.maxSize > -1 && newSize > this.state.maxSize) {
-      newSize = this.state.maxSize;
-    }
-    if (this.state.minSize > -1 && newSize < this.state.minSize) {
-      newSize = this.state.minSize;
+    if (newSize !== -1) {
+      if (this.state.maxSize > -1 && newSize >= this.state.maxSize) {
+        newSize = this.state.maxSize;
+      } 
+      if (this.state.maxSize < 0 && newSize >= sideSize + this.state.maxSize) {
+        newSize = sideSize + this.state.maxSize;
+      }
+      if (this.state.minSize > -1 && newSize <= this.state.minSize) {
+        newSize = this.state.minSize;
+      }
     }
 
-    if (mode !== 'maximize' && newSize < this.state.sticky) {
+    if (mode !== 'maximize' && newSize <= this.state.sticky) {
       if (updateRatio) {
         newSize = 0;
       }
       mode = 'minimize';
-    } else if (sideSize < newSize + this.state.sticky) {
+    } else if (sideSize <= newSize + this.state.sticky) {
       if (updateRatio) {
         newSize = sideSize;
       }
