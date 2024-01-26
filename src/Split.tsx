@@ -221,14 +221,11 @@ export class Split extends React.Component<SplitProps, ISplitState> {
 
     if (this.state.maxSize > -1 && newSize >= this.state.maxSize) {
       newSize = this.state.maxSize;
-      sideSize = sideSize - newSize;
     } else if (this.state.maxSize < 0 && newSize >= sideSize + this.state.maxSize) {
       newSize = sideSize + this.state.maxSize;
-      sideSize = sideSize - newSize;
     }
     else if (this.state.minSize > -1 && newSize <= this.state.minSize) {
       newSize = this.state.minSize;
-      sideSize = sideSize - newSize;
     }
 
     if (mode !== 'maximize' && newSize <= this.state.sticky) {
