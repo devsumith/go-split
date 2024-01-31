@@ -203,11 +203,6 @@ export class Split extends React.Component<SplitProps, ISplitState> {
       disable
     });
 
-    if (disable) {
-      this.setMode('maximize')
-    } else {
-      this.setMode(this.props.mode ?? 'resize')
-    }
     this.props.onDisable?.(disable);
   };
   setSize = (size: number, updateRatio?: boolean) => {
