@@ -25,37 +25,39 @@ export function Pane(props: PaneProps) {
       ...(style || {}) 
     };
   
-    if(state.disable) {
-      if(main) {
-        patchedStyle.flexBasis = 'auto'
-      } 
-    } else {
-      if(main) {
+    if(main) {
+      if(state.disable) {
+          patchedStyle.flexBasis = 'auto'
+          ref.current.style.removeProperty('minWidth');
+          ref.current.style.removeProperty('minHeight');
+          ref.current.style.removeProperty('maxWidth');
+          ref.current.style.removeProperty('maxHeight');
+      } else {
         patchedStyle.flexBasis = state.getMainSizeStyle();
         if(patchedStyle.flexBasis === 'auto' && basis) {
           patchedStyle.flexBasis = basis;
         }
-      }
-    
-      if(state.split == 'vertical') {
-        if(state.minSize > 0) {
-          patchedStyle.minWidth = `${state.minSize}px`;
-        }
-        if(state.maxSize > 0) {
-          patchedStyle.maxWidth = `${state.maxSize}px`;
-        }
-        if(state.maxSize < 0) {
-          patchedStyle.maxWidth = `calc(100% + ${state.maxSize}px)`;
-        }
-      } else {
-        if(state.minSize > 0) {
-          patchedStyle.minHeight = `${state.minSize}px`;
-        }
-        if(state.maxSize > 0) {
-          patchedStyle.maxHeight = `${state.maxSize}px`
-        }
-        if(state.maxSize < 0) {
-          patchedStyle.maxHeight = `calc(100% + ${state.maxSize}px)`;
+      
+        if(state.split == 'vertical') {
+          if(state.minSize > 0) {
+            patchedStyle.minWidth = `${state.minSize}px`;
+          }
+          if(state.maxSize > 0) {
+            patchedStyle.maxWidth = `${state.maxSize}px`;
+          }
+          if(state.maxSize < 0) {
+            patchedStyle.maxWidth = `calc(100% + ${state.maxSize}px)`;
+          }
+        } else {
+          if(state.minSize > 0) {
+            patchedStyle.minHeight = `${state.minSize}px`;
+          }
+          if(state.maxSize > 0) {
+            patchedStyle.maxHeight = `${state.maxSize}px`
+          }
+          if(state.maxSize < 0) {
+            patchedStyle.maxHeight = `calc(100% + ${state.maxSize}px)`;
+          }
         }
       }
     }
