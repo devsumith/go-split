@@ -27,7 +27,7 @@ export function Pane(props: PaneProps) {
   
     if(main) {
       if(state.disable) {
-          patchedStyle.flexBasis = 'auto'
+          patchedStyle.flexBasis = 0
           ref.current.style.removeProperty('minWidth');
           ref.current.style.removeProperty('minHeight');
           ref.current.style.removeProperty('maxWidth');
